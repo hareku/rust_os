@@ -4,6 +4,7 @@
 #![feature(alloc_error_handler)]
 #![feature(const_mut_refs)]
 #![feature(const_in_array_repeat_expressions)]
+#![feature(wake_trait)]
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
@@ -15,6 +16,7 @@ pub mod interrupts;
 pub mod gdt;
 pub mod memory;
 pub mod allocator;
+pub mod task;
 
 extern crate alloc;
 

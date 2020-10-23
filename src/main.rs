@@ -7,6 +7,7 @@
 extern crate alloc;
 
 use rust_os::println;
+use rust_os::task::{executor::Executor, keyboard, Task};
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
 
@@ -30,7 +31,19 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();
 
-    rust_os::hlt_loop();
+    let mut executor = Executor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(keyboard::print_keypresses()));
+    executor.run();
+}
+
+async fn async_number() -> u32 {
+    42
+}
+
+async fn example_task() {
+    let number = async_number().await;
+    println!("async number: {}", number);
 }
 
 /// This function is called on panic.
